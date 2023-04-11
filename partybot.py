@@ -249,6 +249,12 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         )
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Salve! Para entender como funciona o BOT mande um /help e eu te explicarei o que cada comando faz :)"
+    )
+
 
 
 def main() -> None:
