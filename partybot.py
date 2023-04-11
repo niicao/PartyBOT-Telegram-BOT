@@ -96,7 +96,6 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     with open("resources/ID_index", "r+") as file_checker:
         file_checker.seek(0, os.SEEK_END)
         endOfFile = file_checker.tell() <= 1
-        print(endOfFile)
         i = 0
         file_checker.seek(0, os.SEEK_SET)
         
