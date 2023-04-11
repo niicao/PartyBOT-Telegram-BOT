@@ -166,10 +166,11 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.bot_data.update(payload)
 
 
-async def getupdate(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def inside(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id,text ='Nuh ' + update.message.reply_to_message.from_user.name + ', ai é inside demais')
 
-
+async def fatos(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(chat_id=update.effective_chat.id,text ='Aqui ' + update.message.reply_to_message.from_user.name + ' cuspiu fatos.')
 
 async def receive_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
@@ -216,9 +217,10 @@ from telegram.ext import CommandHandler, Updater
 async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file = open("resources/" +str(update.message.reply_to_message.message_id), "r")
     text = file.readlines()
-    print_message = ""
-    for i in range(0, len(text)):
-        print_message += text[i].split("@")[0]
+    print_message = text[0].strip() + '\n'
+
+    for i in range(1, len(text)):
+        print_message += text[i].split("@")[0] + '\n'
 
 
     await context.bot.send_message(chat_id= update.effective_chat.id, text=print_message)
@@ -228,10 +230,10 @@ async def call_everyone(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file = open("resources/" + str(update.message.reply_to_message.message_id), "r")
     list_names = file.readlines()
 
-    for i in range(1, int(len(list_names)/4)):
+    for i in range(0, int(len(list_names)/4)):
         # 0*1 + 1  0*2 + 2... 1*4 + 1 1*4 + 2
         await context.bot.send_message(chat_id=update.effective_chat.id,
-        text= "@" + list_names[i*4 + 1].partition("@") + "@" + list_names[i*4 + 2].partition("@") + "\n" + "@" + list_names[i*4 + 3].partition("@") + "\n" + "@" + list_names[i*4 + 4].partition("@") + "\n"
+        text= "@" + list_names[i*4 + 1].partition("@")[-1] + "@" + list_names[i*4 + 2].partition("@")[-1] + "@" + list_names[i*4 + 3].partition("@")[-1] + "@" + list_names[i*4 + 4].partition("@")[-1] + "\n"
         )
     counter_for_last_names = len(list_names)%4 - 1
     msg_str = ""
@@ -267,11 +269,9 @@ def main() -> None:
     application.add_handler(CommandHandler("list", reply_call_list))
     application.add_handler(CommandHandler("help", help))
     application.add_handler(CommandHandler("everyone", call_everyone))
-    
-
-    application.add_handler(CommandHandler('inside', getupdate))
+    application.add_handler(CommandHandler('inside', inside))
     application.add_handler(CommandHandler("start", start))
-
+    application.add_handler(CommandHandler("fatos", fatos))
     application.add_handler(PollAnswerHandler(receive_poll_answer))
     application.run_polling()
 
