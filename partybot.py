@@ -270,6 +270,7 @@ def main() -> None:
     
 
     application.add_handler(CommandHandler('inside', getupdate))
+    application.add_handler(CommandHandler("start", start))
 
     application.add_handler(PollAnswerHandler(receive_poll_answer))
     application.run_polling()
