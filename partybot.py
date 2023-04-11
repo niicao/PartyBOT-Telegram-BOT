@@ -93,12 +93,15 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     date2 = datetime.datetime.strptime(date2, "%Y-%m-%d %X")
 
 
-    with open("../resources/ID_index", "r+") as file_checker:
-        
+    with open("resources/ID_index", "r+") as file_checker:
+        file_checker.seek(0, os.SEEK_END)
+        endOfFile = file_checker.tell() <= 1
+        print(endOfFile)
         i = 0
+        file_checker.seek(0, os.SEEK_SET)
         
         lista_horario_id = file_checker.readlines()
-        while i < len(lista_horario_id):
+        while i < len(lista_horario_id) and not endOfFile:
             date1 = datetime.datetime.strptime(lista_horario_id[i], "%Y-%m-%d %X\n")
             time_diff = date2 - date1
             if time_diff.days > 30:
@@ -106,7 +109,7 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 delete_id = delete_id.strip()
 
                 os.remove(delete_id)
-                updateFile = open("../resources/ID_index", "w+")
+                updateFile = open("resources/ID_index", "w+")
 
                 for word in lista_horario_id:
                     if word != lista_horario_id[i] and word != lista_horario_id[i+1]:
@@ -131,13 +134,13 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
     date1 = date1.replace(tzinfo=None)
     date2 = date2.replace(tzinfo=None)
 
-    file = open("../resources/" + str(message.id), "w")
+    file = open("resources/" + str(message.id), "w")
     
     file.write(event_name + "\n")
 
     file.close()
 
-    file_index = open("../resources/ID_index", "a")
+    file_index = open("resources/ID_index", "a")
 
     date_write = datetime.datetime.strptime(str(update.message.date.replace(tzinfo=None)), "%Y-%m-%d %X")
 
@@ -180,7 +183,7 @@ async def receive_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE
     if 0 in answer.option_ids:
 
         print(answered_poll.get("message_id"))
-        file = open("../resources/" + str(answered_poll.get("message_id")), "a")
+        file = open("resources/" + str(answered_poll.get("message_id")), "a")
         file.write(update.effective_user.full_name + " @"+update.effective_user.username + "\n")
 
         
@@ -213,7 +216,7 @@ async def receive_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE
 from telegram.ext import CommandHandler, Updater
 
 async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    file = open("../resources/" +str(update.message.reply_to_message.message_id), "r")
+    file = open("resources/" +str(update.message.reply_to_message.message_id), "r")
     text = file.readlines()
     print_message = ""
     for i in range(0, len(text)):
@@ -224,7 +227,7 @@ async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def call_everyone(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    file = open("../resources/" + str(update.message.reply_to_message.message_id), "r")
+    file = open("resources/" + str(update.message.reply_to_message.message_id), "r")
     list_names = file.readlines()
 
     for i in range(1, int(len(list_names)/4)):
