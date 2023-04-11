@@ -229,12 +229,11 @@ async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def call_everyone(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file = open("resources/" + str(update.message.reply_to_message.message_id), "r")
     list_names = file.readlines()
-
-    for i in range(0, int(len(list_names)/4)):
-        # 0*1 + 1  0*2 + 2... 1*4 + 1 1*4 + 2
-        await context.bot.send_message(chat_id=update.effective_chat.id,
-        text= "@" + list_names[i*4 + 1].partition("@")[-1] + "@" + list_names[i*4 + 2].partition("@")[-1] + "@" + list_names[i*4 + 3].partition("@")[-1] + "@" + list_names[i*4 + 4].partition("@")[-1] + "\n"
-        )
+    if(len(list_names) > 4):
+        for i in range(0, int(len(list_names)/4)):
+            # 0*1 + 1  0*2 + 2... 1*4 + 1 1*4 + 2
+            await context.bot.send_message(chat_id=update.effective_chat.id,
+            text="@" + list_names[i*4 + 1].partition("@")[-1] + "@" + list_names[i*4 + 2].partition("@")[-1] + "@" + list_names[i*4 + 3].partition("@")[-1] + "@" + list_names[i*4 + 4].partition("@")[-1] + "\n")
     counter_for_last_names = len(list_names)%4 - 1
     msg_str = ""
     for j in range(len(list_names)-1, (len(list_names) - len(list_names)%4), -1):
@@ -247,7 +246,7 @@ async def help(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
 
-        text="Olá, os comandos do PartyCaller BOT são: \n/poll (ENQUETE) para criar uma enquete de SIM ou NAO\n\n/list ao responder uma mensagem para retornar todos os usuários que votaram SIM na enquete\n\n/inside para dizer que algo era inside demais!\n\n/everyone ao responder uma enquete para pingar todos os usuários que votaram X naquela mensagem, lembrando que o telegram só pinga 4 usuários por mensagem, logo o bot vai mandar múltiplas mensagens!\n\n Qualquer problema, contatar @Niicaoxd"       
+        text="Olá, os comandos do PartyCaller BOT são: \n/poll (ENQUETE) para criar uma enquete de SIM ou NAO\n\n/list ao responder uma mensagem para retornar todos os usuários que votaram SIM na enquete\n\n/inside para dizer que algo era inside demais!\n\n/everyone ao responder uma enquete para pingar todos os usuários que votaram X naquela mensagem, lembrando que o telegram só pinga 4 usuários por mensagem, logo o bot vai mandar múltiplas mensagens!\n/fatos para quando alguém cuspir fatos no chat (precisa estar respondendo a mensagem com o comando)\n\n Qualquer problema, contatar @Niicaoxd"       
 
         )
 
