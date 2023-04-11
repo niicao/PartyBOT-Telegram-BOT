@@ -99,6 +99,7 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
         i = 0
         file_checker.seek(0, os.SEEK_SET)
         
+        updateFile = open("resources/ID_index", "w+")
         lista_horario_id = file_checker.readlines()
         while i < len(lista_horario_id) and not endOfFile:
             date1 = datetime.datetime.strptime(lista_horario_id[i], "%Y-%m-%d %X\n")
@@ -108,7 +109,6 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 delete_id = delete_id.strip()
 
                 os.remove(delete_id)
-                updateFile = open("resources/ID_index", "w+")
 
                 for word in lista_horario_id:
                     if word != lista_horario_id[i] and word != lista_horario_id[i+1]:
@@ -181,7 +181,6 @@ async def receive_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE
 
     if 0 in answer.option_ids:
 
-        print(answered_poll.get("message_id"))
         file = open("resources/" + str(answered_poll.get("message_id")), "a")
         file.write(update.effective_user.full_name + " @"+update.effective_user.username + "\n")
 
@@ -219,7 +218,7 @@ async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = file.readlines()
     print_message = ""
     for i in range(0, len(text)):
-        print_message += text[i].split("@")[0] + "\n"
+        print_message += text[i].split("@")[0]
 
 
     await context.bot.send_message(chat_id= update.effective_chat.id, text=print_message)
