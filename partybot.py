@@ -5,6 +5,7 @@ import datetime
 import pytz
 from telegram import __version__ as TG_VER
 import os
+import telegram
 
 
 try:
@@ -229,13 +230,13 @@ from telegram.ext import CommandHandler, Updater
 async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file = open("resources/" +str(update.message.reply_to_message.message_id), "r")
     text = file.readlines()
-    print_message = "** " +text[0].strip()+ " **" + '\n'
+    print_message = "<b>" +text[0].strip()+ "</b>" + '\n'
 
     for i in range(1, len(text)):
         print_message += text[i].split("@")[0] + '\n'
 
 
-    await context.bot.send_message(chat_id= update.effective_chat.id, text=print_message)
+    await context.bot.send_message(chat_id= update.effective_chat.id, text=print_message, parse_mode='HTML')
 
 
 async def call_everyone(update: Update, context: ContextTypes.DEFAULT_TYPE):
