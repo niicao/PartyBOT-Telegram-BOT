@@ -15,15 +15,18 @@ O projeto foi criado para ser utilizado em um grupo de amigos para combinar enco
 
 ## Funções
 
-### Poll
+### poll
 The BOT creates a non-anonymous poll, with "yes" and "no" answers e with the title being the phrase inserted immediately after the command.
 ___
 O BOT cria uma enquete, com as respostas sim ou não e com o título sendo a frase inserida imediatamente após o comando. A enquete é não anônima.
 
-### List
+### list
 Command that is used by answering a poll sent previously by the BOT. It sends a message with every name on the list of users that votes "yes" on that poll, along with the title of the poll in the beginning in bold text.
 ___________________________________________
 Comando que é utilizado respondendo uma enquete enviada anteriormente pelo BOT. Envia uma mensagem com todos os nomes dos usuários que votaram sim naquela enquete, com o nome da enquete no início da mensagem, em negrito.
 
-
+### everyone
+Sends a message notifying all the users that voted "yes" in a poll, has to be used in a reply to a poll. Since Telegram only notifies when the number of @'d people is up to 4, the BOT sends multiple messages with four usernames per message to avoid this.
+___
+Envia uma mensagem notificado todos os usuários que votaram "sim" em uma enquete, deve ser usado em uma resposta a uma enquete. Como o Telegram apenas notifica os usuários quando uma mensagem tem no máximo 4 usuários marcados, o BOT envia múltiplas mensagens para evitar esse problema.
 
