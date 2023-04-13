@@ -167,10 +167,12 @@ async def poll(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def inside(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id,text ='Nuh ' + update.message.reply_to_message.from_user.name + ', ai é inside demais')
+    await context.bot.sendMessage(chat_id=update.effective_chat.id,text ='Nuh ' + update.message.reply_to_message.from_user.name + ', ai é inside demais', reply_to_message_id=update.message.reply_to_message.message_id)
+
+
 
 async def fatos(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id,text ='Aqui ' + update.message.reply_to_message.from_user.name + ' cuspiu fatos.')
+    await context.bot.send_message(chat_id=update.effective_chat.id,text ='Aqui ' + update.message.reply_to_message.from_user.name + ' cuspiu fatos.', reply_to_message_id=update.message.reply_to_message.message_id)
 
 async def receive_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
@@ -184,6 +186,16 @@ async def receive_poll_answer(update: Update, context: ContextTypes.DEFAULT_TYPE
 
         file = open("resources/" + str(answered_poll.get("message_id")), "a")
         file.write(update.effective_user.full_name + " @"+update.effective_user.username + "\n")
+
+    elif 1 in answer.option_ids:
+        with open("resources/" + str(answered_poll.get("message_id")), "r") as f:
+            lines = f.readlines()
+        with open("resources/" + str(answered_poll.get("message_id")), "w") as f:
+            for line in lines:
+                if line.strip("\n") != str(update.effective_user.full_name + " @" + update.effective_user.username).strip("\n"):
+                    f.write(line)
+        f.close()
+
 
         
 
@@ -217,7 +229,7 @@ from telegram.ext import CommandHandler, Updater
 async def reply_call_list(update: Update, context: ContextTypes.DEFAULT_TYPE):
     file = open("resources/" +str(update.message.reply_to_message.message_id), "r")
     text = file.readlines()
-    print_message = text[0].strip() + '\n'
+    print_message = "** " +text[0].strip()+ " **" + '\n'
 
     for i in range(1, len(text)):
         print_message += text[i].split("@")[0] + '\n'
@@ -237,7 +249,7 @@ async def call_everyone(update: Update, context: ContextTypes.DEFAULT_TYPE):
     counter_for_last_names = len(list_names)%4 - 1
     msg_str = ""
     for j in range(len(list_names)-1, (len(list_names) - len(list_names)%4), -1):
-        msg_str += "@" + list_names[j].partition("@")[-1] + "\n"
+        msg_str += "@" + list_names[j].partition("@")[-1]
     await context.bot.send_message(chat_id=update.effective_chat.id,
         text=msg_str
         )
@@ -256,7 +268,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text="Salve! Para entender como funciona o BOT mande um /help e eu te explicarei o que cada comando faz :)"
     )
 
-
+async def pci(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    file = open("resources/pci.txt", "r")
+    list_names = file.readlines()
+    if(len(list_names) > 4):
+        for i in range(0, int(len(list_names)/4)):
+            # 0*1 + 1  0*2 + 2... 1*4 + 1 1*4 + 2
+            await context.bot.send_message(chat_id=update.effective_chat.id,
+            text=list_names[i*4 + 0] + list_names[i*4 + 1] + list_names[i*4 + 2] + list_names[i*4 + 3] + "\n")
+    counter_for_last_names = len(list_names)%4 - 1
+    msg_str = ""
+    for j in range(len(list_names)-1, (len(list_names) - len(list_names)%4), -1):
+        msg_str += list_names[j] + "\n"
+    await context.bot.send_message(chat_id=update.effective_chat.id,
+        text=msg_str
+        )
 
 def main() -> None:
 
@@ -271,6 +297,7 @@ def main() -> None:
     application.add_handler(CommandHandler('inside', inside))
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("fatos", fatos))
+    application.add_handler(CommandHandler("pci", pci))
     application.add_handler(PollAnswerHandler(receive_poll_answer))
     application.run_polling()
 
