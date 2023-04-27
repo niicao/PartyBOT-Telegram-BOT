@@ -288,7 +288,7 @@ async def pci(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main() -> None:
 
 
-    application = Application.builder().token("6100414754:AAEHpcO0-wOJRIEro-969LphXCp-qH4oHr8").build()
+    application = Application.builder().token("TOKEN").build()
 
 
     application.add_handler(CommandHandler("poll", poll))
